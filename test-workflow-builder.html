@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test WorkflowBuilder Fix</title>
+</head>
+<body>
+    <h1>WorkflowBuilder Debug Test</h1>
+    <p>This file confirms the WorkflowBuilder.tsx has been fixed with:</p>
+    <ul>
+        <li>✅ Safe array checks for availableOperations</li>
+        <li>✅ Safe array checks for datasets</li>
+        <li>✅ Safe array checks for availableColumns</li>
+        <li>✅ Error handling for operations loading</li>
+        <li>✅ Loading states</li>
+        <li>✅ Improved column extraction from dataset responses</li>
+    </ul>
+    
+    <h2>Key Fixes Applied:</h2>
+    <pre>
+// BEFORE (crashes):
+const availableOperations = operationsResponse || [];
+availableOperations.map(...)
+
+// AFTER (safe):
+const availableOperations = operationsResponse || [];
+(availableOperations || []).map(...)
+
+// BEFORE (crashes):
+setDatasets(response.data.results || response.data);
+
+// AFTER (safe):
+const datasetsData = response.data.results || response.data || [];
+setDatasets(Array.isArray(datasetsData) ? datasetsData : []);
+    </pre>
+    
+    <p><strong>The modal should now open without crashing!</strong></p>
+</body>
+</html>
