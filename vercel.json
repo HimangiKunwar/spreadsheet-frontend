@@ -1,6 +1,7 @@
 {
-    "routes": [
-        { "src": "/(.*\\.js)", "dest": "/$1" },  
-        { "src": "/(.*)", "dest": "/index.html" }
-]
+  "buildCommand": "vite build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

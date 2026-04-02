@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -22,17 +21,14 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    assetsDir: 'assets', // ✅ put JS/CSS/images in /assets/
+    assetsDir: 'assets',
     sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks: {
-          // Vendor chunks - split large dependencies
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-query': ['@tanstack/react-query', 'axios'],
           'vendor-ui': ['lucide-react', 'react-hot-toast'],
-
-          // Feature chunks - group related pages
           'feature-datasets': [
             './src/pages/datasets/DatasetsListPage.tsx',
             './src/pages/datasets/DatasetUploadPage.tsx',
@@ -43,18 +39,11 @@ export default defineConfig({
             './src/pages/reconciliation/NewReconciliationPage.tsx',
             './src/pages/reconciliation/ReconciliationDetailPage.tsx',
           ],
-          'feature-bulk': [
-            './src/pages/bulk/BulkOperationsPage.tsx',
-            './src/pages/bulk/SavedRulesPage.tsx',
-          ],
           'feature-reports': [
             './src/pages/reports/ReportsListPage.tsx',
             './src/pages/reports/ReportCreatePage.tsx',
             './src/pages/reports/ReportDetailPage.tsx',
             './src/pages/reports/ReportEditPage.tsx',
-          ],
-          'feature-workflows': [
-            './src/pages/workflows/WorkflowsPage.tsx',
           ],
         },
       },
