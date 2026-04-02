@@ -22,6 +22,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    assetsDir: 'assets', // ✅ put JS/CSS/images in /assets/
     sourcemap: true,
     rollupOptions: {
       output: {
@@ -30,7 +31,7 @@ export default defineConfig({
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-query': ['@tanstack/react-query', 'axios'],
           'vendor-ui': ['lucide-react', 'react-hot-toast'],
-          
+
           // Feature chunks - group related pages
           'feature-datasets': [
             './src/pages/datasets/DatasetsListPage.tsx',
