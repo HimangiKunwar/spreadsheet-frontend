@@ -1,10 +1,33 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, Component, ReactNode } from 'react';
 import { AppLayout } from './components/layout/AppLayout';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { ThemeProvider } from './contexts/ThemeContext';
+
+class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null };
+  static getDerivedStateFromError(error: Error) { return { error }; }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="min-h-screen flex items-center justify-center p-8">
+          <div className="text-center">
+            <h2 className="text-xl font-semibold text-red-600 mb-2">Something went wrong</h2>
+            <pre className="text-sm text-gray-600 bg-gray-100 p-4 rounded text-left overflow-auto max-w-lg">
+              {(this.state.error as Error).message}
+            </pre>
+            <button onClick={() => window.location.reload()} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">
+              Reload
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 // Auth Pages (keep eager loading for initial pages)
 import LoginPage from './pages/auth/LoginPage';
@@ -48,14 +71,10 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
+    <ErrorBoundary>
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
-        <Router
-          future={{
-            v7_startTransition: true,
-            v7_relativeSplatPath: true,
-          }}
-        >
+        <Router>
         <div className="App">
           <Routes>
             {/* Public Routes */}
@@ -158,6 +177,7 @@ function App() {
         </Router>
       </QueryClientProvider>
     </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 
